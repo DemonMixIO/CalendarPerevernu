@@ -2,9 +2,15 @@ package com.many.calendarperevernu.elems
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.text.Layout
 import android.util.AttributeSet
+import android.util.Log
 import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import android.widget.FrameLayout
+import android.widget.LinearLayout
+import androidx.cardview.widget.CardView
 import com.many.calendarperevernu.R
 import com.many.calendarperevernu.databinding.CulendarCardBinding
 
@@ -31,6 +37,7 @@ class DayCardView(context: Context, attrs: AttributeSet?, defStyleAttr: Int, def
 
     @SuppressLint("ResourceAsColor")
     private fun InitAttrs(attrs: AttributeSet?, defStyleAttr: Int, defStyleRes: Int) {
+        findViewById<LinearLayout>(R.id.backGround).setBackgroundColor(R.color.yellow)
         if (attrs == null) {
             return
         }
@@ -45,17 +52,26 @@ class DayCardView(context: Context, attrs: AttributeSet?, defStyleAttr: Int, def
         binding.textView.setText(dayText ?: "OK")
 
 //        val background = typedArray.getBoolean(R.styleable.DayCardView_emptyCard)
-        binding.cardView.setCardBackgroundColor(R.color.white)
+        findViewById<LinearLayout>(R.id.backGround).setBackgroundColor(R.color.yellow)
         typedArray.recycle()
     }
     fun setDay(day: Int){
         binding.textView.setText(day.toString())
+    }
+    fun getText(): Int{
+        return binding.textView.text.toString().toInt()
+    }
+    @SuppressLint("ResourceAsColor")
+    fun setColor(color: Int){
+        binding.backGround.setBackgroundColor(R.color.white)
+//        Log.d("MY",  )
     }
 
     @SuppressLint("ResourceAsColor")
     fun setEmpty(){
         binding.cardView.setCardBackgroundColor(R.color.white)
     }
+
 
 
 }

@@ -9,20 +9,25 @@
     <androidx.cardview.widget.CardView
         android:id="@+id/cardView"
         android:layout_width="50dp"
-        android:layout_height="100dp"
+        android:layout_height="50dp"
         android:layout_gravity="center"
         android:layout_marginStart="2dp"
         android:layout_marginTop="2dp"
         android:layout_marginRight="2dp"
-        android:layout_marginBottom="2dp"
-        app:cardBackgroundColor="#FFE274">
-
-        <TextView
-            android:id="@+id/textView"
+        android:layout_marginBottom="2dp">
+        <LinearLayout
+            android:id="@+id/backGround"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:gravity="center"
-            android:textSize="30sp" />
+            android:orientation="horizontal" >
+            <TextView
+                android:id="@+id/textView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:textSize="30sp" />
+        </LinearLayout>
+
     </androidx.cardview.widget.CardView>
 
 </merge>

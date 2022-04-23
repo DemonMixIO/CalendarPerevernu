@@ -10,7 +10,6 @@ import com.many.calendarperevernu.databinding.CulendarCardBinding
 
 class DayCardViewEmpty(context: Context, attrs: AttributeSet?, defStyleAttr: Int, defStyleRes: Int) :
     FrameLayout(context, attrs, defStyleAttr, defStyleRes) {
-    private lateinit var binding: CulendarCardBinding
 
     constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int) : this(
         context,
@@ -25,7 +24,7 @@ class DayCardViewEmpty(context: Context, attrs: AttributeSet?, defStyleAttr: Int
     init {
         var inflater = LayoutInflater.from(context)
         inflater.inflate(R.layout.culendar_card_empty, this, true)
-        binding = CulendarCardBinding.bind(this)
+//        binding = .bind(this)
     }
 
 
