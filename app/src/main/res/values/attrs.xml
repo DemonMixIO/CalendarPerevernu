@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="AutoGridLayout">auto_gtid_layout</declare-styleable>
+    <declare-styleable name="AutoGridLayout_columnWidth">Auto_grid_layout_column_width</declare-styleable>
+    <declare-styleable name="DayCardView">
+        <attr name="dayText" format="string"/>
+        <attr name="weekDayName" format="string"/>
+        <attr name="emptyCard" format="boolean"/>
+    </declare-styleable>
+</resources>
