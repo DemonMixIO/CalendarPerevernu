@@ -42,6 +42,7 @@ class FragmentCalendar(year: Int, month: Int) : Fragment() {
     var yearAlready = 0
     var monthAlready = 0
     lateinit var nowCard: CardView
+    var listCardView = emptyArray<CardView>()
 
     init {
         yearAlready = year
@@ -84,7 +85,7 @@ class FragmentCalendar(year: Int, month: Int) : Fragment() {
     @RequiresApi(Build.VERSION_CODES.O)
     private fun createCalendar() {
         binding.containerDays.removeAllViews()
-//        createHeader()
+        listCardView = emptyArray<CardView>()
         var emptyDays = calendar.setDayWith(date.year, date.monthValue)
         for (j in 1..emptyDays.first) {
             var card = CardView(requireActivity().applicationContext)
@@ -97,8 +98,6 @@ class FragmentCalendar(year: Int, month: Int) : Fragment() {
             if ((LocalDate.now().year != date.year || LocalDate.now().month != date.month) && i == 1) {
                 nowCard = cardView
                 cardView.setCardBackgroundColor(Color.RED)
-                (activity as AppCompatActivity).supportActionBar?.title =
-                    i.toString() + " " + date.month.toString() + " " + date.year
             }else{
                 cardView.setCardBackgroundColor(Color.YELLOW)
             }
@@ -132,6 +131,7 @@ class FragmentCalendar(year: Int, month: Int) : Fragment() {
             // Set card view maximum elevation
             cardView.maxCardElevation = 12F
             cardView.addView(generateTextView(i.toString()));
+            listCardView += cardView
             binding.containerDays.addView(cardView)
             if (LocalDate.now().year == date.year && LocalDate.now().month == date.month && LocalDate.now().dayOfMonth == i) {
                 cardView.setCardBackgroundColor(Color.RED)
@@ -146,13 +146,41 @@ class FragmentCalendar(year: Int, month: Int) : Fragment() {
                 nowCard.setCardBackgroundColor(Color.YELLOW)
                 nowCard = cardView;
                 nowCard.setCardBackgroundColor(Color.RED)
+                (activity as MainActivity?)!!.setDate(LocalDate.of(date.year, date.month, text.text.toString().toInt()))
+                selectDays()
             }
         }
-
+        selectDays()
 //        (ContextUtils.getActivity(requireActivity().applicationContext) as AppCompatActivity).supportActionBar!!.title =
 //            MainActivity.date.month.toString() + " " + MainActivity.date.year
     }
+    private fun selectDays(){
+//        if (listCardView)
+        var selectedDate = MainActivity.startDate.toEpochDay() - 1;
+        for (i in listCardView){
+            i.setCardBackgroundColor(Color.YELLOW)
+        }
+        var count = -1
+        while (selectedDate < MainActivity.endDate.toEpochDay()){
+            count += 1
+            selectedDate += 1
+            var day = LocalDate.ofEpochDay(selectedDate)
+            Log.d("MY", "Echo ${listCardView.size} ${LocalDate.ofEpochDay(selectedDate)} " + selectedDate + " " + MainActivity.endDate.toEpochDay())
 
+            if (day.year == date.year && day.month == date.month){
+                var c = listCardView[day.dayOfMonth - 1]
+                c.setCardBackgroundColor(Color.RED)
+            }
+
+        }
+//        if (count  0 || MainActivity.startDate.toEpochDay() == MainActivity.endDate.toEpochDay()){
+        if (count != 0 && !MainActivity.firstDate){
+            (listCardView[MainActivity.startDate.dayOfMonth - 1] as CardView).setCardBackgroundColor(Color.RED)
+        }
+//        }else{
+//            listCardView[0].setCardBackgroundColor(Color.RED)
+//        }
+    }
     override fun onResume() {
         super.onResume()
         createCalendar()

@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.widget.*
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
@@ -13,17 +14,42 @@ import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.widget.ViewPager2
 import com.many.calendarperevernu.databinding.ActivityMainBinding
 import com.many.calendarperevernu.mycalendar.MyCalendur
+import java.time.LocalDate
 import java.time.YearMonth
+import java.time.format.DateTimeFormatter
+
 
 private const val NUM_PAGES = 5
 
 class MainActivity : AppCompatActivity() {
-    private lateinit var binding: ActivityMainBinding
     private lateinit var viewPager: ViewPager2
+    private lateinit var binding: ActivityMainBinding
 
     companion object {
         lateinit var calendar: MyCalendur
+        lateinit var startDate: LocalDate
+        lateinit var endDate: LocalDate
+        var firstDate = true
+    }
+    @RequiresApi(Build.VERSION_CODES.O)
+    fun setDate(date: LocalDate){
+        if (firstDate){
+            startDate = date
+            endDate = date
+            firstDate = false
+        }else{
+            endDate = date
+            Log.d("MY", "Echo " + startDate.toEpochDay() + " " + endDate.toEpochDay())
 
+            if (startDate.toEpochDay().toLong() > endDate.toEpochDay().toLong()){
+                endDate = startDate
+                startDate = date
+            }
+            firstDate = true
+        }
+        var formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy")
+        findViewById<TextView>(R.id.startDate).text = formatter.format(startDate)
+        findViewById<TextView>(R.id.endDate).text = formatter.format(endDate)
     }
 
     @SuppressLint("ResourceAsColor", "RestrictedApi")
@@ -32,21 +58,20 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         calendar = MyCalendur()
+        startDate = LocalDate.now()
+        endDate = LocalDate.now()
         binding = ActivityMainBinding.inflate(layoutInflater);
-
-        // Instantiate a ViewPager2 and a PagerAdapter.
         viewPager = findViewById(R.id.pager)
 //        viewPager.setPageTransformer(ZoomOutPageTransformer())
 
-        // The pager adapter, which provides the pages to the view pager widget.
         val pagerAdapter = ScreenSlidePagerAdapter(this)
-
         viewPager.adapter = pagerAdapter
         var ym = MyCalendur.difDate(YearMonth.now())
-        Log.d("My", "months: " + (ym.year * 12 + ym.monthValue -1))
+
         viewPager.currentItem = ym.year * 12 + ym.monthValue
 
     }
+
     private inner class ScreenSlidePagerAdapter(fa: FragmentActivity) : FragmentStateAdapter(fa) {
         override fun getItemCount(): Int = Int.MAX_VALUE
 
@@ -58,4 +83,8 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    fun showDatePickerDialog(v: View) {
+        val newFragment = DatePickerFragment()
+        newFragment.show(supportFragmentManager, "datePicker")
+    }
 }
