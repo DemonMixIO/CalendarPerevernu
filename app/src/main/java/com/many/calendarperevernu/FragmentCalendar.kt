@@ -19,7 +19,10 @@ import androidx.cardview.widget.CardView
 import androidx.fragment.app.Fragment
 import com.many.calendarperevernu.MainActivity.Companion.calendar
 import com.many.calendarperevernu.databinding.FragmentCalendarBinding
+import java.time.Instant
 import java.time.LocalDate
+import java.time.ZoneId
+import java.time.ZoneOffset
 
 @RequiresApi(Build.VERSION_CODES.O)
 class FragmentCalendar(year: Int, month: Int) : Fragment() {
@@ -43,6 +46,7 @@ class FragmentCalendar(year: Int, month: Int) : Fragment() {
     var monthAlready = 0
     lateinit var nowCard: CardView
     var listCardView = emptyArray<CardView>()
+    var listSelected = emptyArray<Int>()
 
     init {
         yearAlready = year
@@ -57,6 +61,7 @@ class FragmentCalendar(year: Int, month: Int) : Fragment() {
     ): View {
         _binding = FragmentCalendarBinding.inflate(inflater, container, false)
         val view = binding.root
+
         return view
     }
 
@@ -148,6 +153,8 @@ class FragmentCalendar(year: Int, month: Int) : Fragment() {
                 nowCard.setCardBackgroundColor(Color.RED)
                 (activity as MainActivity?)!!.setDate(LocalDate.of(date.year, date.month, text.text.toString().toInt()))
                 selectDays()
+
+                (activity as MainActivity?)!!.runLastEvents(LocalDate.of(date.year, date.month, text.text.toString().toInt()))
             }
         }
         selectDays()
@@ -155,12 +162,13 @@ class FragmentCalendar(year: Int, month: Int) : Fragment() {
 //            MainActivity.date.month.toString() + " " + MainActivity.date.year
     }
     private fun selectDays(){
-//        if (listCardView)
+        listSelected = emptyArray()
         var selectedDate = MainActivity.startDate.toEpochDay() - 1;
         for (i in listCardView){
             i.setCardBackgroundColor(Color.YELLOW)
         }
         var count = -1
+        var i = 0
         while (selectedDate < MainActivity.endDate.toEpochDay()){
             count += 1
             selectedDate += 1
@@ -168,6 +176,8 @@ class FragmentCalendar(year: Int, month: Int) : Fragment() {
             Log.d("MY", "Echo ${listCardView.size} ${LocalDate.ofEpochDay(selectedDate)} " + selectedDate + " " + MainActivity.endDate.toEpochDay())
 
             if (day.year == date.year && day.month == date.month){
+                i++
+                listSelected += i
                 var c = listCardView[day.dayOfMonth - 1]
                 c.setCardBackgroundColor(Color.RED)
             }
@@ -175,11 +185,10 @@ class FragmentCalendar(year: Int, month: Int) : Fragment() {
         }
 //        if (count  0 || MainActivity.startDate.toEpochDay() == MainActivity.endDate.toEpochDay()){
         if (count != 0 && !MainActivity.firstDate){
+            listSelected += MainActivity.startDate.dayOfMonth - 1
             (listCardView[MainActivity.startDate.dayOfMonth - 1] as CardView).setCardBackgroundColor(Color.RED)
         }
-//        }else{
-//            listCardView[0].setCardBackgroundColor(Color.RED)
-//        }
+        (activity as MainActivity?)!!.runSelectedTemp(date, listSelected)
     }
     override fun onResume() {
         super.onResume()

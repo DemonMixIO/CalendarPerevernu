@@ -11,12 +11,13 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <LinearLayout
+        <androidx.viewpager2.widget.ViewPager2
+            android:id="@+id/pager"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="0.5">
 
-        </LinearLayout>
+        </androidx.viewpager2.widget.ViewPager2>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -35,6 +36,7 @@
                     android:id="@+id/startDate"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginEnd="20dp"
                     android:layout_weight="1"
                     android:text="2022-04-21"
                     android:textColor="@color/black"
@@ -45,7 +47,7 @@
                 android:id="@+id/imageView"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
-                app:srcCompat="@drawable/free_icon_font_calendar_3917244"/>
+                app:srcCompat="@drawable/free_icon_font_calendar_3917244" />
 
 
             <LinearLayout
@@ -59,19 +61,67 @@
                     android:id="@+id/endDate"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginStart="20dp"
                     android:text="2022-05-01"
                     android:textColor="@color/black"
                     android:textSize="23sp" />
             </LinearLayout>
         </LinearLayout>
 
-        <androidx.viewpager2.widget.ViewPager2
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="0.5"
-            android:id="@+id/pager">
+            android:orientation="vertical">
 
-        </androidx.viewpager2.widget.ViewPager2>
+            <TextView
+                android:id="@+id/cityName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingStart="20dp"
+                android:text="Ulianovsk"
+                android:textAlignment="textStart"
+                android:textColor="@color/darkYellow"
+                android:textSize="34sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/mainText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingStart="20dp"
+                android:text="Fine"
+                android:textAlignment="textStart"
+                android:textColor="@color/teal_700"
+                android:textSize="24sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tempText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingStart="20dp"
+                android:text="13C"
+                android:textAlignment="textStart"
+                android:textColor="@color/darkYellow"
+                android:textSize="24sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/windText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingStart="20dp"
+                android:text="13m/s"
+                android:textAlignment="textStart"
+                android:textColor="@color/darkYellow"
+                android:textSize="24sp"
+                android:textStyle="bold" />
+            <com.jjoe64.graphview.GraphView
+                android:layout_width="match_parent"
+                android:layout_height="200dip"
+                android:id="@+id/graph" />
+        </LinearLayout>
 
     </LinearLayout>
 
