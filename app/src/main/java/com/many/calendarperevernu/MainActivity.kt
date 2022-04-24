@@ -27,6 +27,8 @@ import com.jjoe64.graphview.series.DataPoint
 import com.jjoe64.graphview.series.LineGraphSeries
 import com.jjoe64.graphview.series.Series
 import com.many.calendarperevernu.databinding.ActivityMainBinding
+import com.many.calendarperevernu.db.Model
+import com.many.calendarperevernu.db.UsersDBHelper
 import com.many.calendarperevernu.mycalendar.MyCalendur
 import okhttp3.*
 import org.json.JSONArray
@@ -50,6 +52,7 @@ class MainActivity : AppCompatActivity(), LocationListener {
     lateinit var state: String;
     private var ll: Pair<Double, Double> = Pair(0.0, 0.0)
     var client: OkHttpClient = OkHttpClient()
+//    lateinit var usersDBHelper : UsersDBHelper
 
     companion object {
         private var eventsCardIsReady = false
@@ -87,7 +90,7 @@ class MainActivity : AppCompatActivity(), LocationListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
+//        usersDBHelper = UsersDBHelper(this)
         val permissions = arrayOf(
             Manifest.permission.ACCESS_COARSE_LOCATION,
             Manifest.permission.ACCESS_FINE_LOCATION
@@ -104,17 +107,17 @@ class MainActivity : AppCompatActivity(), LocationListener {
         val pagerAdapter = ScreenSlidePagerAdapter(this)
         viewPager.adapter = pagerAdapter
         var ym = MyCalendur.difDate(YearMonth.now())
-        val graph = findViewById<View>(R.id.graph) as GraphView
-        val series: LineGraphSeries<DataPoint> = LineGraphSeries(
-            arrayOf(
-                DataPoint(0.0, 1.0),
-                DataPoint(1.0, 5.0),
-                DataPoint(2.0, 3.0),
-                DataPoint(3.0, 2.0),
-                DataPoint(4.0, 6.0)
-            )
-        )
-        graph.addSeries(series)
+//        val graph = findViewById<View>(R.id.graph) as GraphView
+//        val series: LineGraphSeries<DataPoint> = LineGraphSeries(
+//            arrayOf(
+//                DataPoint(0.0, 1.0),
+//                DataPoint(1.0, 5.0),
+//                DataPoint(2.0, 3.0),
+//                DataPoint(3.0, 2.0),
+//                DataPoint(4.0, 6.0)
+//            )
+//        )
+//        graph.addSeries(series)
         viewPager.currentItem = ym.year * 12 + ym.monthValue
         getLocation()
     }
@@ -141,13 +144,22 @@ class MainActivity : AppCompatActivity(), LocationListener {
                                 ((((testV["days"] as JSONArray)[0] as JSONObject)["temp"].toString()
                                     .toFloat() - 32.0) / 1.8).toFloat().roundToInt()
                             Log.d("MY", l.toString())
-                            a.appendData(DataPoint(l.toDouble(), temp.toDouble()), false, 60)
-                            if (l == list[list.size-1]){}
+                            if (l == 1) {
+                                a.appendData(DataPoint(l.toDouble(), 25.0), false, 3)
+                            } else
+                                if (l == list[list.size - 1]) {
+                                    a.appendData(
+                                        DataPoint(l.toDouble(), 30.0),
+                                        false,
+                                        3
+                                    )
+                                }
                         } catch (e: IOException) {
                             e.printStackTrace()
                         } catch (e: JSONException) {
                             e.printStackTrace()
                         }
+                        all = true
                     }
 
                     override fun onFailure(call: Call, e: IOException) {}
